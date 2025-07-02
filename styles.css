@@ -2,9 +2,9 @@
     Fichier: styles.css
     Description: Styles CSS pour le site de mutualisation de la paye des AED
     Auteur: Zahardin BOUKORTT
-    Date de création:Juin 2025
- 
+    Date de création: Juin 2025
 */
+
 /* Définir la police Gelosa Cara */
 @font-face {
     font-family: 'GelosaCara';
@@ -12,6 +12,7 @@
          url('fonts/GelosaCara-Regular.otf') format('opentype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Réinitialisation */
@@ -24,37 +25,36 @@
 body {
     font-family: 'Nunito', Arial, sans-serif;
     line-height: 1.6;
-    color: #000000;
+    color: #000;
 }
 
 header {
-  background: #006973;
-  color: antiquewhite;
-  padding: 0.75rem 2rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  box-sizing: border-box;
+    background: #006973;
+    color: antiquewhite;
+    padding: 0.75rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
 }
-
 
 .site-title {
     font-family: 'GelosaCara', 'Playfair Display', serif;
     font-size: 48px;
     font-weight: 400;
-    margin-left: 2rem; /* Retrait à gauche */
+    margin-left: 2rem;
 }
 
 nav ul {
     list-style: none;
     display: flex;
     gap: 2rem;
-    margin-right: 2rem; /* Décalage vers la gauche */
+    margin-right: 2rem;
 }
 
 nav a {
@@ -73,9 +73,8 @@ main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
-    margin-top: 100px; /* même valeur que header.height */
+    margin-top: 100px;
 }
-
 
 section {
     margin-bottom: 3rem;
@@ -88,51 +87,28 @@ h1, h2, h3 {
 
 h1 {
     font-size: 2.5rem;
-    margin-top: 3rem; /* Espace avant la rubrique */   margin-bottom: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
 }
 
 h2 {
-    color: black;
+    color: #000;
     font-size: 1.8rem;
-    margin-top: 2.5rem; /* Espace avant la rubrique */
-    margin-bottom: 1rem; /* Espace après le titre */
-    border: 1px solid #006973; /* Ligne fine */
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #006973;
     padding-bottom: 0.5rem;
-    text-align: center; /* Centrer le texte */
+    text-align: center;
 }
 
 h3 {
-    color: #000000;
+    color: #000;
     font-size: 1.4rem;
-}
-@media screen and (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
-  }
-
-  .site-title,
-  nav a {
-    font-size: 28px;
-    text-align: center;
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0;
-  }
-
-  main {
-    padding-top: 220px; /* adapter si le header prend plus de hauteur sur mobile */
-  }
-
 }
 
 .btn {
     background: #006973;
-    color: white;
+    color: #fff;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 5px;
@@ -159,7 +135,7 @@ h3 {
     text-align: center;
     border-radius: 5px;
     text-decoration: none;
-    color: #000000;
+    color: #000;
     transition: background 0.3s;
 }
 
@@ -176,13 +152,13 @@ h3 {
 .download-item {
     text-align: center;
     padding: 1rem;
-    background: #ddd; /* Fond pavé */
-    border: 1px solid #ddd; /* Bordure fine */
+    background: #ddd;
+    border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 .download-item a {
-    color: #006973; /* Couleur lien */
+    color: #006973;
     text-decoration: none;
     font-family: 'Nunito', Arial, sans-serif;
     font-weight: 400;
@@ -193,7 +169,7 @@ h3 {
 }
 
 .download-item p {
-    margin: 0; /* Pas de marge supplémentaire */
+    margin: 0;
 }
 
 footer {
@@ -201,7 +177,7 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
-    color: #000000;
+    color: #000;
 }
 
 .back-button {
@@ -219,14 +195,16 @@ footer {
     border: 1px solid #ddd;
     border-radius: 5px;
     width: 100%;
-    height: calc(100vh - 200px); /* Ajuste à la hauteur de la fenêtre moins les marges */
+    height: calc(100vh - 200px);
     overflow: hidden;
 }
+
 #pdf-embed {
     width: 100%;
-    height: 100%; /* Remplit le conteneur */
-    display: block; /* Évite les marges */
+    height: 100%;
+    display: block;
 }
+
 #related-links {
     margin-top: 2rem;
 }
@@ -249,30 +227,36 @@ footer {
     text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive: unified for tablet and phones */
+@media (max-width: 900px) {
     header {
         flex-direction: column;
+        align-items: center;
         text-align: center;
+        padding: 2rem 1rem;
     }
 
-    .site-title {
-        margin-bottom: 1rem;
+    .site-title,
+    nav a {
+        font-size: 28px;
+        text-align: center;
+        margin-left: 0;
     }
 
     nav ul {
         flex-direction: column;
         gap: 1rem;
+        margin: 0;
+        padding: 0;
     }
 
-    nav a {
-        font-size: 24px;
+    main {
+        padding: 2rem 1rem;
+        margin-top: 120px;
+        padding-top: 0;
     }
 
-    .regulations-grid {
-        grid-template-columns: 1fr;
-    }
-
+    .regulations-grid,
     .download-grid {
         grid-template-columns: 1fr;
     }
@@ -280,81 +264,91 @@ footer {
     .bottom-buttons {
         flex-direction: column;
         gap: 1rem;
+        align-items: stretch;
     }
 
-    #pdf-viewer embed {
+    #pdf-viewer embed,
+    #pdf-embed {
         height: 400px;
     }
-.top-button {
-    position: fixed;
-    bottom: 2rem;
-    width: 100%; /* Prend toute la largeur */
-    display: flex;
-    justify-content: center; /* Centre le contenu */
-    z-index: 1000;
+
+    .top-button {
+        position: fixed;
+        bottom: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .top-button .btn {
+        background: #006973;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Nunito', Arial, sans-serif;
+        font-weight: 700;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .top-button .btn:hover {
+        background: #004d57;
+    }
 }
 
-.top-button .btn {
-    background: #006973;
-    color: white;
-    padding: 0.75rem 1.5rem;
+/* Page title and form styles */
+.page-title {
+    font-family: 'Nunito', sans-serif;
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: #fff;
+    padding: 15px;
     border-radius: 5px;
-    text-decoration: none;
-    font-family: 'Nunito', Arial, sans-serif;
-    font-weight: 700;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 10px auto;
 }
-.top-button .btn:hover {
-    background: #004d57;
+
+label {
+    display: block;
+    margin: 10px 0 5px;
 }
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
-.page-title
- {
-            font-family: nunito, sans-serif;
-            margin-top: 5rem; /* Espace avant la rubrique */   margin-bottom: 1rem;
-            background-color: #f4f4f4;
-        }
-        
-    
-        .container {
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 800px;
-            margin: 10px auto;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #e8f4f0;
-            border-radius: 4px;
-        }
-        .alert {
-            color: red;
-            font-weight: bold;
-            
-        }
+
+button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e8f4f0;
+    border-radius: 4px;
+}
+
+.alert {
+    color: red;
+    font-weight: bold;
+}
