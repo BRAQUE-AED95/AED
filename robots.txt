@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /font/
+Disallow: /documents/
+
