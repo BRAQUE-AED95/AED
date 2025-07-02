@@ -99,7 +99,7 @@ h1 {
 h2 {
     color: black;
     font-size: 1.8rem;
-    margin-top: 5rem; /* Espace avant la rubrique */
+    margin-top: 2.5rem; /* Espace avant la rubrique */
     margin-bottom: 1rem; /* Espace après le titre */
     border: 1px solid #006973; /* Ligne fine */
     padding-bottom: 0.5rem;
