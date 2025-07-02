@@ -28,20 +28,22 @@ body {
 }
 
 header {
-    background: #006973; /* rgb(0, 115, 115) */
+    background: #006973;
     color: antiquewhite;
-    padding: 1,9rem;
+    padding: 1.9rem; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Make header span full width */
-    position: fixed; /* Fixes the header to the viewport */
-    top: 0; /* Positions it at the top *
-    z-index: 1000; /* Ensures it stays on top of other content */
-  
-
-
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    height: 100px; /* ou autre valeur selon ce que tu constates */
 }
+
+
+
+
 
 .site-title {
     font-family: 'GelosaCara', 'Playfair Display', serif;
@@ -73,7 +75,9 @@ main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    margin-top: 100px; /* même valeur que header.height */
 }
+
 
 section {
     margin-bottom: 3rem;
@@ -102,6 +106,22 @@ h2 {
 h3 {
     color: #000000;
     font-size: 1.4rem;
+}
+@media screen and (max-width: 600px) {
+    header {
+        height: 150px;
+        flex-direction: column; /* pour empiler le titre et le menu si besoin */
+        text-align: center;
+    }
+
+    main {
+        margin-top: 150px;
+    }
+
+    .site-title,
+    nav a {
+        font-size: 32px; /* plus petit sur mobile */
+    }
 }
 
 .btn {
