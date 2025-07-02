@@ -1,0 +1,422 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul Service Hebdomadaire AED</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .site-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav li {
+            margin: 0 15px;
+        }
+        nav a {
+            text-decoration: none;
+        }
+        .container {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 10px auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4f0;
+            border-radius: 4px;
+        }
+        .alert {
+            color: red;
+            font-weight: bold;
+            margin-top: 0px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="site-title">Lycée Georges Braque</div>
+        <nav>
+            <ul>               
+                <li><a href="index.html#home">Accueil</a></li>
+                <li><a href="index.html#regulations">Réglementation</a></li>
+                <li><a href="index.html#dossier-administratif">Téléchargements</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Calcul du Service Hebdomadaire des AED<br> Année scolaire 2025-2026</h2>
+        <p>Cet outil calcule le service hebdomadaire des AED selon la quotité, à partir des jours travaillés.</p>
+        <p>Il tient compte du calendrier scolaire 2025-2026 et permet de prévoir un service de permanence jusqu'au 10 juillet 2026 et à partir du 24 août 2026 </p>
+        <p>Bien que créé pour le Val d'Oise cet outil intègre les 3 zones de congés</p><br>
+        <p><strong>Pour les Assistants Pédagogiques</strong> le calcul prend en compte le crédit d'heures de préparation et répartit le service dû uniquement sur les semaines hors congés scolaires </p>
+        <div class="alert"><p>En cas de calcul temps de travail trop élevé sur un contrat court <br>merci de calculer une date de fin sur la <a href="calcul-date-fin.html">page dédiée</a></p></div>
+        <br>
+        <p>Veuillez noter que les AED qui ont un contrat n'incluant aucun congé scolaire ont droit à 2,5 jours par mois travaillé.</p>
+        <p>Ces jours de congés sont à prendre pendant la durée du contrat et ne peuvent pas être reportés</p><br>
+        
+        <label for="startDate">Date de début du contrat :</label>
+        <input type="date" id="startDate" min="2025-09-01" max="2026-08-31" required>
+
+        <label for="endDate">Date de fin du contrat :</label>
+        <input type="date" id="endDate" max="2026-08-31" required>
+
+        <label for="quotite">Quotité de travail (%):</label>
+        <input type="number" id="quotite" min="1" max="100" value="100" required>
+
+        <label for="zoneScolaire">Zone scolaire :</label>
+        <select id="zoneScolaire">
+            <option value="C" selected>Zone C</option>
+            <option value="A">Zone A</option>
+            <option value="B">Zone B</option>
+        </select>
+
+        <label for="creditHeures">Crédit d'heures annuel (200 heures) :</label>
+        <select id="creditHeures">
+            <option value="non" selected>Non</option>
+            <option value="oui">Oui</option>
+        </select>
+        <label for="proportionAP"><strong>En cas de fonction d'AP, en indiquer le pourcentage :</strong></label>
+        <input type="number" id="proportionAP" min="0" max="100" value="0" required>
+
+        <button onclick="calculateService()">Calculer</button>
+
+        <div id="result"></div>
+    </div>
+
+<script>
+    // Congés scolaires 2025-2026 par zone
+    const vacancesParZone = {
+        A: [
+            { debut: new Date('2025-10-19'), fin: new Date('2025-11-02') },
+            { debut: new Date('2025-12-21'), fin: new Date('2026-01-04') },
+            { debut: new Date('2026-02-08'), fin: new Date('2026-02-22') },
+            { debut: new Date('2026-04-05'), fin: new Date('2026-04-19') },
+            { debut: new Date('2026-07-11'), fin: new Date('2026-08-23') }
+        ],
+        B: [
+            { debut: new Date('2025-10-19'), fin: new Date('2025-11-02') },
+            { debut: new Date('2025-12-21'), fin: new Date('2026-01-04') },
+            { debut: new Date('2026-02-15'), fin: new Date('2026-03-01') },
+            { debut: new Date('2026-04-12'), fin: new Date('2026-04-26') },
+            { debut: new Date('2026-07-11'), fin: new Date('2026-08-23') }
+        ],
+        C: [
+            { debut: new Date('2025-10-19'), fin: new Date('2025-11-02') },
+            { debut: new Date('2025-12-21'), fin: new Date('2026-01-04') },
+            { debut: new Date('2026-02-22'), fin: new Date('2026-03-08') },
+            { debut: new Date('2026-04-19'), fin: new Date('2026-05-03') },
+            { debut: new Date('2026-07-11'), fin: new Date('2026-08-23') }
+        ]
+    };
+
+    function formatHours(decimalHours) {
+        const hours = Math.floor(decimalHours);
+        const minutes = Math.round((decimalHours - hours) * 60);
+        return `${hours} Heures et ${minutes} Minutes`;
+    }
+
+    function calculateService() {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        const quotite = parseFloat(document.getElementById('quotite').value) / 100;
+        const creditHeures = document.getElementById('creditHeures').value === 'oui';
+        const zoneScolaire = document.getElementById('zoneScolaire').value;
+        const proportionAP = parseFloat(document.getElementById('proportionAP').value) / 100;
+
+        if (!startDate || !endDate || isNaN(quotite) || isNaN(proportionAP)) {
+            alert('Veuillez remplir tous les champs correctement.');
+            return;
+        }
+
+        if (endDate < startDate) {
+            alert('La date de fin doit être postérieure à la date de début.');
+            return;
+        }
+
+        // Vérifier que la date de début n'est pas pendant les congés scolaires
+        let isInVacation = false;
+        vacancesParZone[zoneScolaire].forEach(vac => {
+            const vacFinAdjusted = new Date(vac.fin);
+            vacFinAdjusted.setDate(vacFinAdjusted.getDate() + 1);
+            if (startDate >= vac.debut && startDate < vacFinAdjusted) {
+                isInVacation = true;
+            }
+        });
+        if (isInVacation) {
+            alert('La date de début ne peut pas être pendant une période de congés scolaires.');
+            return;
+        }
+
+        // Calculate total days of contract
+        const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+
+        // Calculate paid leave days (2.5 days per 30 days)
+        const paidLeaveDays = Math.floor(totalDays / 30) * 2.5;
+
+        // Calculate days for "fractionnement" bonus
+        const periodeFractionnementStart = new Date('2025-10-01');
+        const periodeFractionnementEnd = new Date('2026-04-30');
+        const contratStartFractionnement = new Date(Math.max(startDate.getTime(), periodeFractionnementStart.getTime()));
+        const contratEndFractionnement = new Date(Math.min(endDate.getTime(), periodeFractionnementEnd.getTime()));
+        let joursCongesPeriodePourFractionnement = 0;
+
+        if (contratEndFractionnement >= contratStartFractionnement) {
+            let currentDayForFractionnement = new Date(contratStartFractionnement);
+            while (currentDayForFractionnement <= contratEndFractionnement) {
+                let isHoliday = false;
+                vacancesParZone[zoneScolaire].forEach(vac => {
+                    if (currentDayForFractionnement >= vac.debut && currentDayForFractionnement <= vac.fin) {
+                        isHoliday = true;
+                    }
+                });
+                if (!isHoliday) {
+                    joursCongesPeriodePourFractionnement++;
+                }
+                currentDayForFractionnement.setDate(currentDayForFractionnement.getDate() + 1);
+            }
+        }
+        const joursCongesAcquisSurPeriodeFractionnement = Math.floor(joursCongesPeriodePourFractionnement / 30) * 2.5;
+
+        // Determine if school holidays are included in the contract's "fractionnement" period
+        let hasVacationInFractionnementPeriod = false;
+        vacancesParZone[zoneScolaire].forEach(vac => {
+            const vacStart = new Date(Math.max(contratStartFractionnement.getTime(), vac.debut.getTime()));
+            const vacEnd = new Date(Math.min(contratEndFractionnement.getTime(), vac.fin.getTime()));
+            if (vacEnd >= vacStart) {
+                hasVacationInFractionnementPeriod = true;
+            }
+        });
+
+        // Calculate "jours de fractionnement"
+        let joursFractionnement = 0;
+        if (hasVacationInFractionnementPeriod) {
+            joursFractionnement = 2;
+        } else {
+            if (joursCongesAcquisSurPeriodeFractionnement >= 5 && joursCongesAcquisSurPeriodeFractionnement <= 7) {
+                joursFractionnement = 1;
+            } else if (joursCongesAcquisSurPeriodeFractionnement > 7) {
+                joursFractionnement = 2;
+            }
+        }
+
+        // Calculate actual working days and vacation days within the contract period
+        let actualWorkingDaysInContract = 0;
+        let actualVacationDaysInContract = 0;
+
+        let currentDayInContract = new Date(startDate);
+        while (currentDayInContract <= endDate) {
+            let isSchoolHoliday = false;
+            vacancesParZone[zoneScolaire].forEach(vac => {
+                if (currentDayInContract >= vac.debut && currentDayInContract <= vac.fin) {
+                    isSchoolHoliday = true;
+                }
+            });
+            if (!isSchoolHoliday) {
+                actualWorkingDaysInContract++;
+            } else {
+                actualVacationDaysInContract++;
+            }
+            currentDayInContract.setDate(currentDayInContract.getDate() + 1);
+        }
+
+        let totalWorkingWeeksForAED = 0;
+        let serviceCumule = 'Non';
+
+        if (totalDays >= 365 && proportionAP === 0) {
+            totalWorkingWeeksForAED = 39;
+            serviceCumule = 'Oui (5 jours ajoutés pour permanence d\'été)';
+        } else if (proportionAP === 0) {
+            totalWorkingWeeksForAED = actualWorkingDaysInContract / 7;
+        }
+
+        // Determine annual hours (with or without credit hours)
+        const heuresAnnuelles = creditHeures ? 1407 : 1607;
+
+        // Calculate preparation time for AP
+        const tempsPreparation = 200 * proportionAP;
+
+        // Calculate total service due
+        let serviceDu = (totalDays / 365) * heuresAnnuelles;
+
+        // Adjust for jours de fractionnement
+        const reductionFractionnement = joursFractionnement * 7;
+        serviceDu -= reductionFractionnement;
+
+        // Adjust by quotité
+        let serviceAjuste = serviceDu * quotite;
+
+        // Subtract preparation time for AP from the total service due
+        serviceAjuste -= tempsPreparation;
+
+        // AP and AED specific calculations
+        let serviceHebdoAP = 0;
+        let serviceHebdoAED = 0;
+        let semainesTravailleesAffichage;
+        let weeksForServiceForAP = 0;
+
+        // Determine the number of "school working days" within the specific AP service period
+        const apServicePeriodStart = new Date(Math.max(startDate.getTime(), new Date('2025-09-01').getTime()));
+        const apServicePeriodEnd = new Date(Math.min(endDate.getTime(), new Date('2026-07-06').getTime()));
+        let actualSchoolWorkingDaysForAPService = 0;
+        if (apServicePeriodEnd >= apServicePeriodStart) {
+            let currentDayForAPService = new Date(apServicePeriodStart);
+            while (currentDayForAPService <= apServicePeriodEnd) {
+                let isSchoolHoliday = false;
+                vacancesParZone[zoneScolaire].forEach(vac => {
+                    if (currentDayForAPService >= vac.debut && currentDayForAPService <= vac.fin) {
+                        isSchoolHoliday = true;
+                    }
+                });
+                if (!isSchoolHoliday) {
+                    actualSchoolWorkingDaysForAPService++;
+                }
+                currentDayForAPService.setDate(currentDayForAPService.getDate() + 1);
+            }
+        }
+        weeksForServiceForAP = actualSchoolWorkingDaysForAPService / 7;
+
+        if (proportionAP > 0) {
+            if (weeksForServiceForAP > 0) {
+                const serviceAPCalculated = (serviceAjuste * proportionAP);
+                serviceHebdoAP = serviceAPCalculated > 0 ? serviceAPCalculated / weeksForServiceForAP : 0;
+                const serviceAEDCalculated = serviceAjuste * (1 - proportionAP);
+                serviceHebdoAED = serviceAEDCalculated > 0 ? serviceAEDCalculated / weeksForServiceForAP : 0;
+            }
+            semainesTravailleesAffichage = `Semaines travaillées (fonctions AP & AED) : ${weeksForServiceForAP.toFixed(2)}`;
+        } else {
+            serviceHebdoAED = totalWorkingWeeksForAED > 0 ? serviceAjuste / totalWorkingWeeksForAED : 0;
+            semainesTravailleesAffichage = `Semaines travaillées : ${totalWorkingWeeksForAED.toFixed(2)}`;
+        }
+
+        let serviceHebdoTotal = serviceHebdoAP + serviceHebdoAED;
+
+        let proportionAPLine = '';
+        let serviceHebdoAPLine = '';
+        let serviceHebdoAEDLine = '';
+        let tempsPreparationLine = '';
+
+        if (proportionAP > 0) {
+            proportionAPLine = `Proportion des fonctions d’Assistant Pédagogique : ${(proportionAP * 100).toFixed(0)}%<br>`;
+            tempsPreparationLine = `Crédit d'heures de préparation (AP) : ${formatHours(tempsPreparation)}<br>`;
+            serviceHebdoAPLine = `Dont fonctions d’AP : ${formatHours(serviceHebdoAP)}<br>`;
+            if (proportionAP < 1) {
+                serviceHebdoAEDLine = `Dont fonctions d’AED : ${formatHours(serviceHebdoAED)}<br>`;
+            }
+        } else {
+            serviceHebdoAEDLine = `Service hebdomadaire AED : ${formatHours(serviceHebdoAED)}<br>`;
+        }
+
+        document.getElementById('result').innerHTML = `
+            <strong>Résultat :</strong><br>
+            Période : du ${startDate.toLocaleDateString('fr-FR')} au ${endDate.toLocaleDateString('fr-FR')}<br>
+            Durée du contrat : ${totalDays.toFixed(0)} jours<br>
+            Quotité : ${(quotite * 100).toFixed(0)}%<br>
+            Zone scolaire : ${zoneScolaire}<br>
+            Crédit d'heures (200 heures) : ${creditHeures ? 'Oui' : 'Non'}<br>
+            ${proportionAPLine}
+            ${tempsPreparationLine}
+            Jours de fractionnement : ${joursFractionnement} (${reductionFractionnement} heures de réduction)<br>
+            Service dû : ${serviceAjuste.toFixed(2)} heures<br>
+            ${semainesTravailleesAffichage}<br>
+            <strong>Service hebdomadaire total : ${formatHours(serviceHebdoTotal)}<br>
+            ${serviceHebdoAPLine}
+            ${serviceHebdoAEDLine}</strong>
+        `;
+    }
+
+    document.getElementById('startDate').addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        const endDateInput = document.getElementById('endDate');
+        if (startDate > new Date('2025-12-31')) {
+            endDateInput.max = '2026-07-10';
+        } else {
+            endDateInput.max = '2026-08-31';
+        }
+    });
+</script>
+</body>
+</html>
