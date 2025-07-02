@@ -218,6 +218,7 @@
             // Affichage
             const resultHTML = `
                 <strong>Résultat :<br>
+                ${alertMessage}
                 <span class="highlight">Date de fin : ${formatDate(EndDate)}</span><br></strong>
                 <span class="highlight">Heures effectuées : ${heuresEffectuees.toFixed(2)} heures (sur ${workingWeeks.toFixed(2)} semaines)</span><br>
                 Service hebdomadaire AED : ${formatHours(serviceHebdo)}<br>
@@ -232,7 +233,7 @@
                 Zone scolaire : ${zoneScolaire}<br>
                 Crédit d'heures : ${creditHeures ? 'Oui' : 'Non'}<br>
                 Fractionnement : ${joursFractionnement} jours (${reductionFractionnement}h)<br>
-                ${alertMessage}
+                
             `;
             document.getElementById('resultStats').innerHTML = resultHTML;
         }
