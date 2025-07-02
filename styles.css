@@ -43,11 +43,6 @@ header {
 }
 
 
-
-
-
-
-
 .site-title {
     font-family: 'GelosaCara', 'Playfair Display', serif;
     font-size: 48px;
@@ -64,7 +59,7 @@ nav ul {
 
 nav a {
     color: antiquewhite;
-    font-size: 48px;
+    font-size: 36px;
     text-decoration: none;
     font-family: 'GelosaCara', 'Playfair Display', serif;
     font-weight: 400;
