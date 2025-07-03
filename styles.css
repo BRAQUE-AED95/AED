@@ -153,6 +153,7 @@ h3 {
 
 .download-item {
     text-align: center;
+    text-decoration : none;
     padding: 1rem;
     background: #ddd;
     border: 1px solid #ddd;
