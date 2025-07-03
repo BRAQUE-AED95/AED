@@ -66,7 +66,7 @@ nav a {
 }
 
 nav a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 main {
@@ -97,6 +97,7 @@ h2 {
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     border: 1px solid #006973;
+    border-radius: 32px;
     padding-bottom: 0.5rem;
     text-align: center;
 }
@@ -111,7 +112,7 @@ h3 {
     color: #fff;
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 33px;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
@@ -133,7 +134,7 @@ h3 {
     background: #659ba2;
     padding: 1rem;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 33px;
     text-decoration: none;
     color: #000;
     transition: background 0.3s;
@@ -141,6 +142,7 @@ h3 {
 
 .regulation-item:hover {
     background: #e0e0e0;
+    border-radius: 33px;
 }
 
 .download-grid {
@@ -154,7 +156,7 @@ h3 {
     padding: 1rem;
     background: #ddd;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 33px;
 }
 
 .download-item a {
@@ -165,7 +167,7 @@ h3 {
 }
 
 .download-item a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .download-item p {
@@ -224,7 +226,7 @@ footer {
 }
 
 #related-links a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 
@@ -255,8 +257,8 @@ input, select {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 3px solid #ccc;
+    border-radius: 32px;
     box-sizing: border-box;
 }
 
