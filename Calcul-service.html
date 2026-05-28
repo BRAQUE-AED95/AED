@@ -59,7 +59,7 @@
             <option value="non" selected>Non</option>
             <option value="oui">Oui</option>
         </select>
-        <label for="proportionAP"><strong>En cas de fonction d'AP, en indiquer le pourcentage :</strong></label>
+        <label for="proportionAP"><strong>En cas de fonction d'AP sur un an, en indiquer le pourcentage :</strong></label>
         <input type="number" id="proportionAP" min="0" max="100" value="0" required>
 
         <button onclick="calculateService()">Calculer</button>
@@ -268,9 +268,19 @@
             }
             semainesTravailleesAffichage = `Semaines travaillées (fonctions AP & AED) : ${weeksForServiceForAP.toFixed(2)}`;
         } else {
-            serviceHebdoAED = totalWorkingWeeksForAED > 0 ? serviceAjuste / totalWorkingWeeksForAED : 0;
-            semainesTravailleesAffichage = `Semaines travaillées : ${totalWorkingWeeksForAED.toFixed(2)}`;
-        }
+    if (totalWorkingWeeksForAED > 0 && totalWorkingWeeksForAED < 1) {
+        // Contrat inférieur à une semaine :
+        // le service hebdomadaire correspond directement au service dû
+        serviceHebdoAED = serviceAjuste;
+    } else {
+        serviceHebdoAED = totalWorkingWeeksForAED > 0
+            ? serviceAjuste / totalWorkingWeeksForAED
+            : 0;
+    }
+
+    semainesTravailleesAffichage =
+        `Semaines travaillées : ${totalWorkingWeeksForAED.toFixed(2)}`;
+}
 
         let serviceHebdoTotal = serviceHebdoAP + serviceHebdoAED;
 
